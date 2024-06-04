@@ -1,29 +1,43 @@
 import React, { memo } from 'react';
-
 import '../assets/styles/homeStyling.css';
 import { Button } from 'antd';
-import { Link } from 'react-router-dom';
-const Home = () => {
+import { increment, decrement } from '../redux/reducers/home';
+import { connect, useDispatch } from 'react-redux';
+
+const Home = (props) => {
+	const dispatch = useDispatch();
+	const { counter, increment, decrement } = props;
 	return (
 		<div className="home">
-			<img
-				src="https://assets-global.website-files.com/65b94b2bab54c86c1cd618a8/66338df3627b90bb94c6415a_logoforwebflow.svg"
-				loading="lazy"
-				width="172"
-				alt=""
-			></img>
-			<Link to="/chat">
-				<Button
-					style={{
-						marginTop: '10px',
-					}}
-					type="primary"
-				>
-					Move to the Assignment
-				</Button>
-			</Link>
+			<span>{counter}</span>
+			<Button
+				onClick={() => dispatch(increment(1))}
+				style={{
+					marginTop: '10px',
+				}}
+				type="primary"
+			>
+				increment
+			</Button>{' '}
+			<Button
+				onClick={() => dispatch(decrement(1))}
+				style={{
+					marginTop: '10px',
+				}}
+				type="primary"
+			>
+				decrement
+			</Button>
 		</div>
 	);
 };
+const mapStateToProps = (state) => ({
+	counter: state.homeReducer.counter,
+});
 
-export default memo(Home);
+const mapDispatchToProps = (dispatch) => ({
+	increment: increment,
+	decrement: decrement,
+});
+const MemoizedHome = memo(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(MemoizedHome);

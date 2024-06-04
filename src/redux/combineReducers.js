@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import chatReducer from './reducers/chat';
+import homeReducer from './reducers/home';
 // Combine Reducers
 const rootReducer = combineReducers({
-	chatReducer: chatReducer,
+	homeReducer: homeReducer,
 	// Add other reducers here if you have more
 });
 
