@@ -1,13 +1,33 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { ReactComponent as Close } from '../assets/svg/close.svg';
 import { ReactComponent as Search } from '../assets/svg/search.svg';
 import { ReactComponent as Tick } from '../assets/svg/tick.svg';
 import '../assets/styles/homeStyling.scss';
 
-const Home = () => {
-	const [info, setInfo] = useState({
-		data: [...(JSON.parse(localStorage.getItem('data')) || [])],
-		filteredData: [...(JSON.parse(localStorage.getItem('data')) || [])],
+interface Task {
+	title: string;
+	status: 'completed' | 'incomplete';
+}
+
+interface InfoState {
+	data: Task[];
+	filteredData: Task[];
+	activeFilter: 'all' | 'completed' | 'incomplete';
+	taskInput: string;
+	filterChanged: boolean;
+	dataChanged: boolean;
+	search: string;
+	searchChanged: boolean;
+	timeout: NodeJS.Timeout | null;
+}
+
+const Home: React.FC = () => {
+	const [info, setInfo] = useState<InfoState>({
+		data: [...(JSON.parse(localStorage.getItem('data') || '[]') as Task[])],
+		filteredData: [
+			...(JSON.parse(localStorage.getItem('data') || '[]') as Task[]),
+		],
 		activeFilter: 'all',
 		taskInput: '',
 		filterChanged: false,
@@ -18,10 +38,10 @@ const Home = () => {
 	});
 
 	useEffect(() => {
-		if (info?.filterChanged) {
+		if (info.filterChanged) {
 			syncFiltereData();
 		}
-	}, [info?.activeFilter, info?.filterChanged]);
+	}, [info.activeFilter, info.filterChanged]);
 
 	useEffect(() => {
 		if (info?.dataChanged) {
@@ -36,28 +56,30 @@ const Home = () => {
 	}, [info?.search, info?.searchChanged]);
 
 	const taskInputOnchange = useCallback(
-		(e) => {
+		(e: React.ChangeEvent<HTMLInputElement>) => {
 			setInfo((prev) => ({
 				...prev,
 				taskInput: e.target.value,
 			}));
 		},
-		[info?.taskInput]
+		[]
 	);
 
 	const onDeleteClick = useCallback(
-		(index) => {
-			const data = [...info?.data];
-			data?.splice(index, 1);
+		(index: number) => {
+			const data = [...info.data];
+			data.splice(index, 1);
 			setInfo((prev) => ({ ...prev, data, dataChanged: true }));
 		},
-		[info?.data]
+		[info.data]
 	);
 
 	const addTask = useCallback(() => {
 		if (info?.taskInput?.length) {
 			let status =
-				info?.activeFilter == 'all' ? 'incomplete' : info?.activeFilter;
+				info?.activeFilter === 'all'
+					? 'incomplete'
+					: info?.activeFilter;
 			const data = [...info?.data, { title: info?.taskInput, status }];
 
 			setInfo((prev) => ({
@@ -90,7 +112,7 @@ const Home = () => {
 	}, [info?.activeFilter, info?.data, info?.search]);
 
 	const onFiltetClick = useCallback(
-		(data) => {
+		(data: 'all' | 'completed' | 'incomplete') => {
 			if (data === info?.activeFilter) {
 				return;
 			}
@@ -102,17 +124,19 @@ const Home = () => {
 		},
 		[info?.activeFilter]
 	);
+
 	const handleDebounceeSearch = useCallback(() => {
-		clearTimeout(info?.timeout);
+		if (info.timeout) {
+			clearTimeout(info.timeout);
+		}
 		const timeout = setTimeout(() => {
 			syncFiltereData();
-			setInfo((prev) => ({ ...prev, timeout }));
 		}, 500);
 		setInfo((prev) => ({ ...prev, timeout }));
-	}, [info?.timeout, syncFiltereData]);
+	}, [syncFiltereData]);
 
 	const handleKeyDown = useCallback(
-		(e) => {
+		(e: React.KeyboardEvent<HTMLInputElement>) => {
 			if (e?.key === 'Enter') {
 				addTask();
 			}
@@ -121,7 +145,7 @@ const Home = () => {
 	);
 
 	const changeStatus = useCallback(
-		(status, index) => {
+		(status: 'completed' | 'incomplete', index: number) => {
 			const data = [...info?.data];
 			data[index].status = status;
 			setInfo((prev) => ({ ...prev, data, dataChanged: true }));
