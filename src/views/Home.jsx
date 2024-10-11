@@ -4,16 +4,10 @@ import { ReactComponent as Search } from '../assets/svg/search.svg';
 import { ReactComponent as Tick } from '../assets/svg/tick.svg';
 import '../assets/styles/homeStyling.scss';
 
-const dataSource = [
-	{ title: 'hello', status: 'incomplete' },
-	{ title: 'yaaa', status: 'completed' },
-	{ title: 'hetrrrllo', status: 'incomplete' },
-];
-
 const Home = () => {
 	const [info, setInfo] = useState({
-		data: [...dataSource],
-		filteredData: [...dataSource],
+		data: [...(JSON.parse(localStorage.getItem('data')) || [])],
+		filteredData: [...(JSON.parse(localStorage.getItem('data')) || [])],
 		activeFilter: 'all',
 		taskInput: '',
 		filterChanged: false,
@@ -92,6 +86,7 @@ const Home = () => {
 			);
 		}
 		setInfo((prev) => ({ ...prev, filteredData }));
+		localStorage.setItem('data', JSON.stringify(data));
 	}, [info?.activeFilter, info?.data, info?.search]);
 
 	const onFiltetClick = useCallback(
