@@ -1,0 +1,160 @@
+.home {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 48px;
+
+	.todoListContainer {
+		max-width: 1200px;
+		width: calc(100% - 32px);
+		height: 100%;
+
+		.headerContainer {
+			display: flex;
+			align-self: stretch;
+			align-items: center;
+			gap: 48px;
+
+			.headerText {
+				font-size: 24px;
+				font-weight: bold;
+				margin-bottom: 20px;
+				color: #000;
+			}
+
+			.searchContainer {
+				display: flex;
+				flex: 1;
+				align-items: center;
+				padding: 10px;
+				border: 1px solid #ccc;
+				border-radius: 25px;
+				background-color: #f9f9f9;
+				align-self: stretch;
+
+				input {
+					border: none;
+					outline: none;
+					font-size: 16px;
+					flex-grow: 1;
+					margin-left: 10px;
+					background-color: transparent;
+				}
+				input::placeholder {
+					color: #b0b0b0;
+				}
+			}
+			.filterContainer {
+				display: flex;
+				gap: 12px;
+				align-items: center;
+
+				.filterButtons {
+					padding: 10px 20px;
+					border: none;
+					border-radius: 5px;
+					cursor: pointer;
+					background-color: #e0e0e0;
+					color: #666;
+					font-size: 16px;
+					font-weight: bold;
+					transition: background-color 0.3s, color 0.3s;
+				}
+
+				.filterButtons.active {
+					background-color: #8bc34a;
+					color: white;
+				}
+				.filterButtons:hover {
+					background-color: #d4d4d4;
+				}
+			}
+		}
+
+		.taskLists {
+			display: flex;
+			align-self: stretch;
+			flex-direction: column;
+			gap: 12px;
+			margin-top: 48px;
+
+			.taskCards {
+				// width: 100%;
+				border-radius: 8px;
+				background-color: #eaf4e1;
+				border: 1px solid #c7e2b4;
+				padding: 10px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.cardsButtonWraper {
+					display: flex;
+					gap: 12px;
+					align-items: center;
+					.radioButton {
+						width: 16px;
+						height: 16px;
+						border: 2px solid #ccc;
+						border-radius: 50%;
+						cursor: pointer;
+					}
+				}
+
+				.closeBtnWrapper {
+					cursor: pointer;
+				}
+			}
+		}
+		.taskInputForm {
+			margin-top: 12px;
+			width: 100%;
+			padding: 12px;
+			border-radius: 8px;
+			border: 1px solid #dcdcdc;
+			font-size: 16px;
+			display: flex;
+			background-color: #f8f8f8;
+			outline: none;
+			transition: border 0.3s ease;
+		}
+		.taskInputForm::placeholder {
+			color: #999999;
+		}
+
+		.taskInputForm:focus {
+			border-color: #7dbb67;
+		}
+
+		.addtaskButtonContainer {
+			margin-top: 12px;
+			background-color: #000;
+			color: #fff;
+			padding: 12px;
+			display: flex;
+			justify-content: center;
+			border-radius: 8px;
+			cursor: pointer;
+		}
+	}
+}
+
+@media only screen and (max-width: 723px) {
+	.headerContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start !important;
+		gap: 18px !important;
+	}
+}
+
+@media only screen and (max-width: 360px) {
+	.filterContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start !important;
+		gap: 12px !important;
+	}
+}
